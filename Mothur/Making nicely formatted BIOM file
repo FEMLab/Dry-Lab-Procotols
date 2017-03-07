@@ -1,0 +1,27 @@
+--------- How to make a nicely formatted .biom file from mothur data ----------------------
+
+# use make.biom on mothur with subsampled stability file and normal constaxonmy file to make .biom
+
+mothur > make.biom( shared=tability.an.0.03.subsample.0.03.shared, constaxonomy=stability.an.cons.taxonomy) 
+
+# will make a file called something like 
+stability.an.0.03.subsample.0.03.biom
+
+# quit mothur
+
+# All of this was done using bioinformatics computer in FEM lab where biom convert was already installed
+
+# cd to the folder containing your .biom file then run this script
+
+biom convert -i stability.an.0.03.subsample.0.03.biom -o table.from_biom_w_taxonomy.txt --to-tsv --header-key taxonomy
+
+#  where -i means name of input file and -o is whatever name you want to give to output file
+
+# (names for your files might be different to what i put in that example script but everything else should be the same)
+
+# Now you can read the resulting .txt file into excel and it should look nice -> samples in columns and final column
+# should be your taxonomy info. 
+
+# You may need to delete the first row as this is usually just empty except for a # and some few words
+# also change the name of OTU ID column before reading into R -> normally it gives a space in the name 
+# which will make problems in R so remove it. 
