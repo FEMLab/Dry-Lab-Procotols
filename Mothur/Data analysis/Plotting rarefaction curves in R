@@ -1,0 +1,67 @@
+## R code for plotting rarefaction curves created in Mothur
+
+## Using R studio
+
+## the releveant mothur file here is "stability.an.groups.rarefaction"
+## BUT we need to trim a bit as Output in mothur consists of a table of # Seqs 
+# vs # otus for each sample
+## each sample gets 3 outputs -> no of OTUs; no of OTUS with Low confidence interval
+## and number of OTUS when using high CI
+## I removed low CI and high CI so I just had one set of rarefaction values for each
+## Sample by doing this...
+
+
+# read in data as it comes out of mothur
+data <- read.table("stability.an.groups.rarefaction", header=T)
+attach(data)
+head(data)
+
+# subset data to choose just the columns whose names start with hci
+data2 <- subset(data, select = grep("hci", names(data))) 
+# check using head that you now only have these colums
+head(data2)
+
+# now we are missing "numsampled column" and I don't know how to add it using R
+# so we will write out the table we made and call it RarefactionHCI.txt
+write.table(data2, "RarefactionHCI.txt", sep="\t")
+# you will find this file in your R working dir
+# open in excel, insert new colum and add numsampled column from 
+# full rarefaction file (by copy&paste); saved file
+# as "cDNA_HCI.rarefaction" and used that for next steps
+
+
+
+## 1. Set Working Directory (WD) (done in Session option)
+## 2. Install necessary libraries ie ggplot and reshape2 (in Tools Option)
+## 3. Then load them using library command
+
+library(ggplot2)
+library(reshape2)
+
+## import data - make sure not directly from excel, do via notepad
+## file = your file name and make sure file is in your WD
+## Header = T means R uses top row as column titles not data values
+
+data3<-read.table(file="cDNA_HCI.rarefaction", header=T)
+
+## to use ggplot data neads to be rearranged
+## do this using melt function with first arguement = name of data set
+## second argement = name of 1st column (ie what will become x axis)
+
+melted3 = melt(data3, id.vars="numsampled")
+
+## now make plot using ggplot() with geom_lime command
+## Add colour = variable to give each line a different colour
+r <- ggplot() + geom_line(data=melted3, aes(x=numsampled, y=value, group=variable, colour=variable))
+
+## add Title and axis labels to plot
+
+r2 <- r +  labs(x="Number of Sequences", y = "Number of OTUs", title = "High CI Refraction curves for cDNA samples") 
+
+## change background of plot to white with theme_bw()
+## change title size and spacing with theme()
+
+r3<- r2 + theme_bw() + theme(plot.title = element_text(size=20, face="bold", vjust=2))
+
+## print r3 to see new plot 
+r3
