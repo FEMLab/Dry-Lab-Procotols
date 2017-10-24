@@ -1,0 +1,89 @@
+## Code for finding out region of Silva database to align sequences against, based on primers used
+## used ccoling's input from this forum to help
+## http://www.mothur.org/forum/viewtopic.php?t=2498
+
+
+## 1) Create a directory containing mothur.exe etc and silva zip file unzipped and out of any subfolders (so Mothur can find them)
+
+## 2) Create the following two fasta files and place in same directory:
+
+
+## a) A file containing a number of sequences of bacterial (or archael, as appropriate) in fasta format - I used one ecoli.
+## got ecoli fasta sequence from here 
+## http://www.ncbi.nlm.nih.gov/nuccore/174375?report=fasta
+## saved as ecoli16.fasta
+
+## b) A file containing your primer sequences (called an 'oligo' file) -> go into note pad and enter primer sequences
+# as follows:
+## pcrtest.oligos is text file containing following 
+
+forward GTGCCAGCMGCCGCGGTAA
+reverse GGACTACHVGGGTWTCTAAT
+## ie seqs for 515f 806r
+
+
+## save as 'pcrTest.oligos' -> then go 
+pcr.seqs(fasta=ecoli16.fasta, oligos=pcrTest.oligos)
+
+
+# then align this against whole database - in this case used silva v119 database. 
+# reference can also be a fasta file, as in the SOP
+
+align.seqs(fasta=ecoli16.pcr.fasta, reference=silva.nr_v119.align)
+
+
+# run summary seqs to see where it aligns and get start/stop position
+
+summary.seqs(fasta=ecoli16.pcr.align)
+
+
+Start	End	NBases	Ambigs	Polymer	NumSeqs
+Minimum:	13862	23444	253	0	6	1
+2.5%-tile:	0	0	0	0	0	1
+25%-tile:	0	0	0	0	0	1
+Median: 	0	0	0	0	0	1
+75%-tile:	0	0	0	0	0	1
+97.5%-tile:	0	0	0	0	0	1
+Maximum:	13862	23444	253	0	6	1
+Mean:	13862	23444	253	0	6
+# of Seqs:	1
+
+Output File Names: 
+ecoli16.pcr.summary
+
+## so start = 13862 and stop = 23444
+
+pcr.seqs(fasta=silva.nr_v119.align, start=13862, end=23444, keepdots=F, processors=30)
+
+Output File Names: 
+silva.nr_v119.pcr.align
+
+
+It took 19 secs to screen 153307 sequences.
+
+## rename the output file: 
+system(mv silva.nr_v119.pcr.align silva.v4.fasta) 
+
+summary.seqs(fasta=silva.v4.fasta) 
+
+output:
+		Start	End	NBases	Ambigs	Polymer	NumSeqs
+Minimum:	1	8211	171	0	3	1
+2.5%-tile:	8	9582	251	0	3	3833
+25%-tile:	8	9582	252	0	4	38327
+Median: 	8	9582	252	0	5	76654
+75%-tile:	8	9582	252	0	5	114981
+97.5%-tile:	8	9582	418	1	6	149475
+Maximum:	2257	9582	1081	5	16	153307
+Mean:	8.01398	9581.96	265.415	0.0476364	4.7364
+# of Seqs:	153307
+
+Output File Names: 
+silva.v4.summary
+
+
+## now align to customised database: 
+
+align.seqs(fasta=stability.trim.contigs.good.unique.fasta, reference=silva.v4.fasta, flip=T) 
+
+## from here continue with MiSeq SOP
