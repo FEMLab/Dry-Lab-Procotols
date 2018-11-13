@@ -5,14 +5,12 @@ https://github.com/marbl/Krona/wiki/Downloads
 
 Option 1: Krona excel template. 
 
-Can download this, unzip and then open in excel making sure macros are enabled. 
-Fill in sheet and then click create Krona near top of excel sheet. 
+Can download this, unzip and then open in excel making sure macros are enabled. Fill in sheet and then click create Krona near top of excel sheet. 
 
 Option 2. Use krona tools. 
 
 Download KronaTools .tar
-Extract it and then open a terminal and navigate to that folder. 
-That will be your working directory and all files you want to read in need to be in that folder. 
+Extract it and then open a terminal and navigate to that folder. That will be your working directory and all files you want to read in need to be in that folder. 
 
 Finish install by running:
 On mac:  sudo ./install.pl
@@ -23,20 +21,33 @@ https://github.com/marbl/Krona/wiki/Importing-text-and-XML-data
 But I just did .txt files. 
 
 These text files should consist of 3 or more columns, separated by tabs.
-Column 1 contains numbers/counts/relative abundances; column two is level one of the 
-Krona (eg phylum) column 3 is level two (eg Class) and so on with how ever many levels you want. 
+Column 1 contains numbers/counts/relative abundances; column two is level one of the Krona (eg phylum) column 3 is level two (eg Class) and so on with how ever many levels you want. 
 
 Now, in your terminal once making sure you are in working directory run the following command: 
-
 ktImportText myFileName.txt
+press enter and it will output a .html file of your krona plot to your working directory. It will have a default name. Be sure to change before running again. 
 
-press enter and it will output a .html file of your krona plot to your working directory. 
-It will have a default name. Be sure to change before running again. 
-
-If you have a few samples that you want the first level of the Krona plot to be coloured the same 
-for the same levels (eg phylum proteobacteria always pink) then read all files names in at once eg:
-
+If you have a few samples that you want the first level of the Krona plot to be coloured the same for the same levels (eg phylum proteobacteria always pink) then read all files names in at once eg:
 ktImportText myFile1.txt myFile2.txt myFile3.txt
 
+ktImportText Soil2_krona_TbyF.txt Soil4_krona_TbyF.txt Soil8_krona_TbyF.txt
 
- 
+ Done - output file will have default name of ‘text.krona.html’
+
+Change this before you make your next krona plot or it will be overwritten. 
+
+Note: there is a default text of ‘all’ that appears in the middle of the Krona plots. If you want to remove this, go into the KronaTools folder (that appeared when you downloaded and un extracted all the stuff from the .tar file). Then go into a folder called ‘scripts’
+Use a text editor to open the script called ImportText.pl and about 10th line down there will be the following text
+
+setOption('name', 'all');
+
+just delete the text all, but leave the inverted commas. So it will appear like so:
+
+setOption('name', '');
+
+Then save it. 
+And re run
+ktImportText myFile1.txt myFile2.txt myFile3.txt
+
+and the ‘all’ should now no longer be missing. 
+
