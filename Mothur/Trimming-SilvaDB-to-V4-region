@@ -1,7 +1,9 @@
 ## Code for finding out region of Silva database to align sequences against, based on primers used
 ## used ccoling's input from this forum to help
 ## http://www.mothur.org/forum/viewtopic.php?t=2498
-
+## you will need to download the most recent version of silva db from here:
+# https://www.mothur.org/wiki/Silva_reference_files
+# unzip it and take out of subfolder (see below)
 
 ## 1) Create a directory containing mothur.exe etc and silva zip file unzipped and out of any subfolders (so Mothur can find them)
 
@@ -15,24 +17,25 @@
 
 ## b) A file containing your primer sequences (called an 'oligo' file) -> go into note pad and enter primer sequences
 # as follows:
-## pcrtest.oligos is text file containing following 
 
 forward GTGCCAGCMGCCGCGGTAA
 reverse GGACTACHVGGGTWTCTAAT
-## ie seqs for 515f 806r
+## ie seqs for 515f and 806r (without barcodes!)
 
 
-## save as 'pcrTest.oligos' -> then go 
+## save as 'pcrTest.oligos' -> then run an in silico PCR to get 'amplicon' your primers align to the E. coli 16S sequence: 
 pcr.seqs(fasta=ecoli16.fasta, oligos=pcrTest.oligos)
 
+# ecoli16.pcr.fasta will be one of out put files: this should contain the sequence of the 'amplicon' created using 
+# which ever primers you input. 
 
-# then align this against whole database - in this case used silva v119 database. 
+# then align this amplicon sequence against the whole database - in this case used silva v119 database. 
 # reference can also be a fasta file, as in the SOP
 
 align.seqs(fasta=ecoli16.pcr.fasta, reference=silva.nr_v119.align)
 
 
-# run summary seqs to see where it aligns and get start/stop position
+# run summary seqs to see where it aligns to get start/stop position for next command
 
 summary.seqs(fasta=ecoli16.pcr.align)
 
@@ -52,7 +55,7 @@ Output File Names:
 ecoli16.pcr.summary
 
 ## so start = 13862 and stop = 23444
-
+# now we use those to trim out database just to the region where our primers bind by running anohter in silico PCR
 pcr.seqs(fasta=silva.nr_v119.align, start=13862, end=23444, keepdots=F, processors=30)
 
 Output File Names: 
