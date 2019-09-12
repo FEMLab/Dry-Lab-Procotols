@@ -1,0 +1,10 @@
+
+## you may wish to blast or search on silva db a representative from 'unknown' OTUs for example
+# this can be achieved with following command get.oturep from Mothur
+# make sure the fasta, column and list files are the most recently 'made' files
+# note that if you used a mock community your file names might have an extra 'pick' in them from step at end when you remove
+
+get.oturep(fasta=stability.trim.contigs.good.unique.good.filter.unique.precluster.pick.pick.fasta, 
+column=stability.trim.contigs.good.unique.good.filter.unique.precluster.pick.pick.dist, name=stability.trim.contigs.good.names, 
+list=stability.trim.contigs.good.unique.good.filter.unique.precluster.pick.pick.opti_mcc.unique_list.list)
+
